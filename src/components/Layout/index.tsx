@@ -69,7 +69,9 @@ export const Layout: FC<LayoutProps> = ({
 
   const handlePage = ({ target: { value } }: any) => {
     setPage(
-      isNaN(value) || Number(value) > Math.floor(data.length / 10) ? "0" : value
+      isNaN(value) || Number(value) > Math.floor(data.length / Number(limit))
+        ? "0"
+        : value
     );
   };
 
