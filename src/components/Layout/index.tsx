@@ -4,6 +4,7 @@ import {
   Flex,
   Grid,
   GridItem,
+  Input,
   Text,
   useColorMode,
   useColorModeValue,
@@ -55,6 +56,10 @@ export const Layout: FC<LayoutProps> = ({
   };
   const previousPage = () => {
     setPage((old: any) => Number(old) - 1);
+  };
+
+  const handlePage = ({ target: { value } }: any) => {
+    setPage(value > Math.floor(data.length / 10) ? "0" : value);
   };
 
   if (isError) {
@@ -151,27 +156,50 @@ export const Layout: FC<LayoutProps> = ({
           </GridItem>
 
           {isSuccessBooks && (
-            <Flex justifyContent="end">
-              <Grid templateColumns="repeat(3, 1fr)">
+            <Flex justifyContent="center">
+              <Grid
+                w={{
+                  base: "full",
+                  lg: "50%",
+                }}
+                alignItems="center"
+                templateColumns="repeat(3, 1fr)"
+                gap={4}
+              >
                 <Button
+                  p={0}
                   variant="outline"
-                  size="sm"
                   onClick={previousPage}
                   disabled={Number(page) === 0 ? true : false}
                 >
                   Previous
                 </Button>
-                <Text textAlign="center">{Number(page) + 1}</Text>
+
+                <Flex
+                  alignItems="center"
+                  gap={{
+                    base: 2,
+                    lg: 4,
+                  }}
+                >
+                  <Input
+                    min={0}
+                    max={Math.floor(data.length / 10)}
+                    value={Number(page)}
+                    onChange={handlePage}
+                    type="number"
+                    w="50%"
+                  />
+                  <Flex justifyContent="center" w="50%">
+                    of {Math.floor(data.length / 10)}
+                  </Flex>
+                </Flex>
+
                 <Button
+                  p={0}
                   variant="outline"
-                  size="sm"
                   onClick={nextPage}
-                  disabled={
-                    Number(page) === Math.floor(data.length / 10) - 1 ||
-                    Number(page) === Math.floor(data.length / 10)
-                      ? true
-                      : false
-                  }
+                  disabled={Number(page) === Math.floor(data.length / 10)}
                 >
                   Next
                 </Button>

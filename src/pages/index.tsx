@@ -5,7 +5,7 @@ import { Shelf } from "../components/Shelf";
 
 const Home: NextPage = () => {
   const [categoryId, setCategoryId] = useState<string>(""),
-    [page, setPage] = useState<string>("1");
+    [page, setPage] = useState<string>("");
 
   const {
     data: books = [],

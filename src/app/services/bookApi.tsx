@@ -26,7 +26,7 @@ export const bookApi = createApi({
       providesTags: ["Book"],
     }),
     readBooksPerpage: query({
-      query: ({ categoryId = "", page = "1" }) => ({
+      query: ({ categoryId = "", page = "" }) => ({
         url: `categoryId=${Number(categoryId)}&page=${Number(page)}`,
         method: "get",
       }),
