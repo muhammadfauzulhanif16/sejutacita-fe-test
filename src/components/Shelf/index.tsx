@@ -28,10 +28,12 @@ interface ShelfProps {
   isLoadingBooks?: boolean;
   isFetchingBooks?: boolean;
   handleSelect?: any;
-  categoryId?: string;
+  categoryId?: any;
   page?: any;
   setPage?: any;
   descriptionPage: string;
+  limit?: any;
+  setLimit?: any;
 }
 
 export const Shelf: FC<ShelfProps> = ({
@@ -45,6 +47,8 @@ export const Shelf: FC<ShelfProps> = ({
   page,
   setPage,
   descriptionPage,
+  limit,
+  setLimit,
 }: ShelfProps) => {
   const dispatch = useAppDispatch();
   const bookmarkData = useAppSelector(
@@ -84,6 +88,8 @@ export const Shelf: FC<ShelfProps> = ({
       page={page}
       isSuccessBooks={isSuccessBooks}
       categoryId={categoryId}
+      limit={limit}
+      setLimit={setLimit}
     >
       <Box h="full">
         {titlePage !== "Bookmark" ? (
@@ -100,7 +106,7 @@ export const Shelf: FC<ShelfProps> = ({
                       {bookFilter.length === 0 ? (
                         <IconButton
                           as={Book}
-                          text={`No books searched`}
+                          text={`No books found`}
                           textProps={{
                             mt: 8,
                             fontWeight: 500,

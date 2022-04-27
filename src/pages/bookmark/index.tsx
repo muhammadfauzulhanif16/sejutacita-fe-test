@@ -8,7 +8,6 @@ const Bookmark: FC<{}> = (): JSX.Element => {
     ({ bookmark }: RootState) => bookmark.data
   );
 
-  console.log("bookmark", bookmarkData);
   return (
     <Shelf
       titlePage="Bookmark"

@@ -1,11 +1,9 @@
 import {
   Box,
-  Button,
   Flex,
   Grid,
   GridItem,
   Input,
-  Text,
   useColorMode,
   useColorModeValue,
 } from "@chakra-ui/react";
@@ -15,7 +13,13 @@ import { PageHeader } from "../PageHeader";
 import { NavBar } from "../NavBar";
 import { useReadAllCategoriesQuery } from "../../app/services/categoryApi";
 import { IconButton } from "../IconButton";
-import { Dismiss } from "@emotion-icons/fluentui-system-regular";
+import {
+  Dismiss,
+  ArrowLeft,
+  ArrowRight,
+  Page,
+  Book,
+} from "@emotion-icons/fluentui-system-regular";
 import { useReadAllBooksByCategoryQuery } from "../../app/services/bookApi";
 
 interface LayoutProps {
@@ -28,6 +32,8 @@ interface LayoutProps {
   isSuccessBooks?: boolean;
   categoryId?: any;
   descriptionPage: string;
+  limit?: any;
+  setLimit?: any;
 }
 
 export const Layout: FC<LayoutProps> = ({
@@ -40,6 +46,8 @@ export const Layout: FC<LayoutProps> = ({
   isSuccessBooks,
   categoryId,
   descriptionPage,
+  limit,
+  setLimit,
 }: LayoutProps): JSX.Element => {
   const { colorMode } = useColorMode();
 
@@ -49,6 +57,7 @@ export const Layout: FC<LayoutProps> = ({
   const gray = {
     "50-900": useColorModeValue("gray.50", "gray.900"),
     "900-50": useColorModeValue("gray.900", "gray.50"),
+    "100-800": useColorModeValue("gray.100", "gray.800"),
   };
 
   const nextPage = () => {
@@ -59,7 +68,13 @@ export const Layout: FC<LayoutProps> = ({
   };
 
   const handlePage = ({ target: { value } }: any) => {
-    setPage(value > Math.floor(data.length / 10) ? "0" : value);
+    setPage(
+      isNaN(value) || Number(value) > Math.floor(data.length / 10) ? "0" : value
+    );
+  };
+
+  const handleLimit = ({ target: { value } }: any) => {
+    setLimit(isNaN(value) || Number(value) > data.length ? "0" : value);
   };
 
   if (isError) {
@@ -157,23 +172,27 @@ export const Layout: FC<LayoutProps> = ({
 
           {isSuccessBooks && (
             <Flex justifyContent="center">
-              <Grid
+              <Flex
                 w={{
                   base: "full",
                   lg: "50%",
                 }}
-                alignItems="center"
-                templateColumns="repeat(3, 1fr)"
+                justifyContent="center"
                 gap={4}
               >
-                <Button
-                  p={0}
-                  variant="outline"
-                  onClick={previousPage}
-                  disabled={Number(page) === 0 ? true : false}
-                >
-                  Previous
-                </Button>
+                <IconButton
+                  as={ArrowLeft}
+                  iconProps={{
+                    w: 6,
+                    h: 6,
+                  }}
+                  buttonProps={{
+                    bgColor: gray["100-800"],
+                    p: 0,
+                    onClick: previousPage,
+                    disabled: Number(page) === 0 ? true : false,
+                  }}
+                />
 
                 <Flex
                   alignItems="center"
@@ -182,28 +201,67 @@ export const Layout: FC<LayoutProps> = ({
                     lg: 4,
                   }}
                 >
-                  <Input
-                    min={0}
-                    max={Math.floor(data.length / 10)}
-                    value={Number(page)}
-                    onChange={handlePage}
-                    type="number"
-                    w="50%"
-                  />
-                  <Flex justifyContent="center" w="50%">
-                    of {Math.floor(data.length / 10)}
+                  <Flex>
+                    <IconButton
+                      as={Book}
+                      iconProps={{
+                        w: 4,
+                        h: 4,
+                      }}
+                      buttonProps={{
+                        p: 0,
+                        variant: "none",
+                      }}
+                    />
+
+                    <Input
+                      min={0}
+                      max={data.length}
+                      value={Number(limit)}
+                      onChange={handleLimit}
+                      variant="flushed"
+                      defaultValue={10}
+                    />
+                  </Flex>
+
+                  <Flex>
+                    <IconButton
+                      as={Page}
+                      iconProps={{
+                        w: 4,
+                        h: 4,
+                      }}
+                      buttonProps={{
+                        p: 0,
+                        variant: "none",
+                      }}
+                    />
+
+                    <Input
+                      min={0}
+                      max={Math.floor(data.length / 10)}
+                      value={Number(page)}
+                      defaultValue={0}
+                      onChange={handlePage}
+                      variant="flushed"
+                    />
                   </Flex>
                 </Flex>
 
-                <Button
-                  p={0}
-                  variant="outline"
-                  onClick={nextPage}
-                  disabled={Number(page) === Math.floor(data.length / 10)}
-                >
-                  Next
-                </Button>
-              </Grid>
+                <IconButton
+                  as={ArrowRight}
+                  iconProps={{
+                    w: 6,
+                    h: 6,
+                  }}
+                  buttonProps={{
+                    bgColor: gray["100-800"],
+                    p: 0,
+                    onClick: nextPage,
+                    disabled: Number(page) === Math.floor(data.length / 10),
+                  }}
+                />
+              </Flex>
             </Flex>
           )}
         </GridItem>

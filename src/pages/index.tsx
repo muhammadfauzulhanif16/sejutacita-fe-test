@@ -5,18 +5,19 @@ import { Shelf } from "../components/Shelf";
 
 const Home: NextPage = () => {
   const [categoryId, setCategoryId] = useState<string>(""),
-    [page, setPage] = useState<string>("");
+    [page, setPage] = useState<string>("0"),
+    [limit, setLimit] = useState<string>("10");
 
   const {
     data: books = [],
     isSuccess: isSuccessBooks,
     isLoading: isLoadingBooks,
     isFetching: isFetchingBooks,
-  } = useReadBooksPerpageQuery({ categoryId, page });
+  } = useReadBooksPerpageQuery({ categoryId, limit, page });
 
   const handleSelect = ({ target: { value } }: any) => {
     setPage("");
-    setCategoryId(String(value));
+    setCategoryId(value);
   };
 
   return (
@@ -31,6 +32,8 @@ const Home: NextPage = () => {
       categoryId={categoryId}
       page={page}
       setPage={setPage}
+      limit={limit}
+      setLimit={setLimit}
     />
   );
 };

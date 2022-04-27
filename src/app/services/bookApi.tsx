@@ -15,7 +15,7 @@ export const bookApi = createApi({
   tagTypes: ["Book"],
   endpoints: ({ query }) => ({
     readAllBooksByCategory: query({
-      query: ({ categoryId = "" }) => {
+      query: ({ categoryId = "0" }) => {
         console.log("categoryId", categoryId);
 
         return {
@@ -26,8 +26,8 @@ export const bookApi = createApi({
       providesTags: ["Book"],
     }),
     readBooksPerpage: query({
-      query: ({ categoryId = "", page = "" }) => ({
-        url: `categoryId=${Number(categoryId)}&page=${Number(page)}`,
+      query: ({ categoryId = "0", limit = "10", page = "0" }) => ({
+        url: `categoryId=${categoryId}&size=${limit}&page=${page}`,
         method: "get",
       }),
       providesTags: ["Book"],
