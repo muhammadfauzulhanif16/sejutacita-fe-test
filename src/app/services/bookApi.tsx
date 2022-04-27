@@ -16,8 +16,6 @@ export const bookApi = createApi({
   endpoints: ({ query }) => ({
     readAllBooksByCategory: query({
       query: ({ categoryId = "0" }) => {
-        console.log("categoryId", categoryId);
-
         return {
           url: `categoryId=${categoryId}`,
           method: "get",
