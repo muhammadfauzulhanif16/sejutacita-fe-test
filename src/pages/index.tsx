@@ -4,9 +4,9 @@ import { useReadBooksPerpageQuery } from "../app/services/bookApi";
 import { Shelf } from "../components/Shelf";
 
 const Home: NextPage = () => {
-  const [categoryId, setCategoryId] = useState<string>(""),
-    [page, setPage] = useState<string>("0"),
-    [limit, setLimit] = useState<string>("10");
+  const [categoryId, setCategoryId] = useState<number>(0),
+    [page, setPage] = useState<number>(0),
+    [limit, setLimit] = useState<number>(10);
 
   const {
     data: books = [],
@@ -16,8 +16,8 @@ const Home: NextPage = () => {
   } = useReadBooksPerpageQuery({ categoryId, limit, page });
 
   const handleSelect = ({ target: { value } }: any) => {
-    setPage("");
-    setCategoryId(value);
+    setPage(0);
+    setCategoryId(Number(value));
   };
 
   return (

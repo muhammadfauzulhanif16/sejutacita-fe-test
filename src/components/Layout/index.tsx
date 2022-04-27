@@ -4,6 +4,7 @@ import {
   Grid,
   GridItem,
   Input,
+  Text,
   useColorMode,
   useColorModeValue,
 } from "@chakra-ui/react";
@@ -61,22 +62,25 @@ export const Layout: FC<LayoutProps> = ({
   };
 
   const nextPage = () => {
-    setPage((old: any) => Number(old) + 1);
+    setPage((old: any) => old + 1);
   };
   const previousPage = () => {
-    setPage((old: any) => Number(old) - 1);
+    setPage((old: any) => old - 1);
   };
 
   const handlePage = ({ target: { value } }: any) => {
     setPage(
-      isNaN(value) || Number(value) > Math.floor(data.length / Number(limit))
-        ? "0"
+      isNaN(value) ||
+        Number(value) > Math.floor(data.length / Number(limit)) - 1
+        ? 0
         : value
     );
   };
-
   const handleLimit = ({ target: { value } }: any) => {
-    setLimit(isNaN(value) || Number(value) > data.length ? "0" : value);
+    setLimit(
+      isNaN(value) || Number(value) > data.length || value === "" ? 0 : value
+    );
+    setPage(0);
   };
 
   if (isError) {
@@ -173,98 +177,109 @@ export const Layout: FC<LayoutProps> = ({
           </GridItem>
 
           {isSuccessBooks && (
-            <Flex justifyContent="center">
-              <Flex
-                w={{
-                  base: "full",
-                  lg: "50%",
+            <Flex
+              w={{
+                base: "full",
+                lg: "50%",
+              }}
+              gap={4}
+              justifySelf="center"
+            >
+              <IconButton
+                as={ArrowLeft}
+                iconProps={{
+                  w: 6,
+                  h: 6,
                 }}
-                justifyContent="center"
-                gap={4}
-              >
+                buttonProps={{
+                  bgColor: gray["100-800"],
+                  p: 0,
+                  onClick: previousPage,
+                  disabled:
+                    Number(limit) === 0 || Number(page) === 0 ? true : false,
+                }}
+              />
+
+              <Flex alignItems="center">
                 <IconButton
-                  as={ArrowLeft}
+                  as={Book}
                   iconProps={{
-                    w: 6,
-                    h: 6,
+                    w: 4,
+                    h: 4,
                   }}
                   buttonProps={{
-                    bgColor: gray["100-800"],
+                    cursor: "default",
                     p: 0,
-                    onClick: previousPage,
-                    disabled: Number(page) === 0 ? true : false,
+                    variant: "none",
                   }}
                 />
 
-                <Flex
-                  alignItems="center"
-                  gap={{
-                    base: 2,
-                    lg: 4,
-                  }}
-                >
-                  <Flex>
-                    <IconButton
-                      as={Book}
-                      iconProps={{
-                        w: 4,
-                        h: 4,
-                      }}
-                      buttonProps={{
-                        p: 0,
-                        variant: "none",
-                      }}
-                    />
+                <Grid templateColumns="repeat(2, 1fr)" alignItems="center">
+                  <Input
+                    min={0}
+                    max={data.length}
+                    value={Number(limit)}
+                    onChange={handleLimit}
+                    variant="flushed"
+                  />
 
-                    <Input
-                      min={0}
-                      max={data.length}
-                      value={Number(limit)}
-                      onChange={handleLimit}
-                      variant="flushed"
-                      defaultValue={10}
-                    />
-                  </Flex>
-
-                  <Flex>
-                    <IconButton
-                      as={Page}
-                      iconProps={{
-                        w: 4,
-                        h: 4,
-                      }}
-                      buttonProps={{
-                        p: 0,
-                        variant: "none",
-                      }}
-                    />
-
-                    <Input
-                      min={0}
-                      max={Math.floor(data.length / Number(limit))}
-                      value={Number(page)}
-                      defaultValue={0}
-                      onChange={handlePage}
-                      variant="flushed"
-                    />
-                  </Flex>
-                </Flex>
-
-                <IconButton
-                  as={ArrowRight}
-                  iconProps={{
-                    w: 6,
-                    h: 6,
-                  }}
-                  buttonProps={{
-                    bgColor: gray["100-800"],
-                    p: 0,
-                    onClick: nextPage,
-                    disabled:
-                      Number(page) === Math.floor(data.length / Number(limit)),
-                  }}
-                />
+                  <Text>
+                    / {Number(limit) === 0 ? data.length : data.length}
+                  </Text>
+                </Grid>
               </Flex>
+
+              <Flex alignItems="center">
+                <IconButton
+                  as={Page}
+                  iconProps={{
+                    w: 4,
+                    h: 4,
+                  }}
+                  buttonProps={{
+                    cursor: "default",
+                    p: 0,
+                    variant: "none",
+                  }}
+                />
+
+                <Grid templateColumns="repeat(2, 1fr)" alignItems="center">
+                  <Input
+                    min={0}
+                    max={Math.floor(data.length / Number(limit))}
+                    value={Number(limit) === 0 ? 0 : Number(page)}
+                    onChange={handlePage}
+                    variant="flushed"
+                  />
+
+                  <Flex>
+                    /
+                    {` ${
+                      !isFinite(Math.floor(data.length / Number(limit))) ||
+                      Number(limit) === data.length
+                        ? 0
+                        : Math.floor(data.length / Number(limit))
+                    }`}
+                  </Flex>
+                </Grid>
+              </Flex>
+
+              <IconButton
+                as={ArrowRight}
+                iconProps={{
+                  w: 6,
+                  h: 6,
+                }}
+                buttonProps={{
+                  bgColor: gray["100-800"],
+                  p: 0,
+                  onClick: nextPage,
+                  disabled:
+                    Number(limit) === 0 ||
+                    Number(limit) === data.length ||
+                    Number(page) === Math.floor(data.length / Number(limit)),
+                }}
+              />
             </Flex>
           )}
         </GridItem>
