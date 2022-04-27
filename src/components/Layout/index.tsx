@@ -239,7 +239,7 @@ export const Layout: FC<LayoutProps> = ({
 
                     <Input
                       min={0}
-                      max={Math.floor(data.length / 10)}
+                      max={Math.floor(data.length / Number(limit))}
                       value={Number(page)}
                       defaultValue={0}
                       onChange={handlePage}
@@ -258,7 +258,8 @@ export const Layout: FC<LayoutProps> = ({
                     bgColor: gray["100-800"],
                     p: 0,
                     onClick: nextPage,
-                    disabled: Number(page) === Math.floor(data.length / 10),
+                    disabled:
+                      Number(page) === Math.floor(data.length / Number(limit)),
                   }}
                 />
               </Flex>
