@@ -198,7 +198,6 @@ export const Shelf: FC<ShelfProps> = ({
                                     >
                                       {title}
                                     </Text>
-                                    <Text>{id}</Text>
                                   </Box>
 
                                   <Icon
